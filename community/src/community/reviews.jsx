@@ -10,37 +10,33 @@ const columns = [
         width: '100px'
     },
     {
-        name: 'coverimage',
-        selector: row => row.coverimage,
-        cell: row => <img src={row.coverimage} width={100} alt={row.name}></img>,
-        width: '150px'
-    },
-
-    {
         name: 'Name',
-        selector: row => row.name,
+        selector: row => row.product_name,
         sortable: true,
         width: '150px'
     },
 
     {
-        name: 'Detail',
-        selector: row => row.detail,
+        name: 'Rating',
+        selector: row => row.rating,
+        sortable: true,
+        width: '150px'
+    },
+
+    {
+        name: 'Comment',
+        selector: row => row.comment,
         sortable: true,
         width: '750px'
     },
 
     {
-        name: 'Latitude',
-        selector: row => row.latitude,
-        sortable: true
-    },
-
-    {
-        name: 'Longitude',
-        selector: row => row.longitude,
-        sortable: true
-    },
+        name: 'Image_url',
+        selector: row => row.image_url,
+        cell: row => <img src={row.image_url} width={100} alt={row.name}></img>,
+        width: '150px'
+    }
+    
 ];
 
 export default function Reviews() {
@@ -56,14 +52,15 @@ export default function Reviews() {
     const fetchData = async () => {
         setLoading(true);
 
-        var url = `http://localhost:5000/api/attractions?page=${page}&per_page=${perPage}`;
+        var url = `http://localhost:5000/api/reviews?page=${page}&per_page=${perPage}`;
+        const response = await axios.get(url);
+        
         if (search) {
             url += `&search=${search}`;
         }
         if (sortColumn) {
             url += `&sort_column=${sortColumn}&sort_direction=${sortColumnDir}`;
         }
-        const response = await axios.get(url);
         
         setData(response.data.data);
         setTotalRows(response.data.total);

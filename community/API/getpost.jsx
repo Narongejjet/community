@@ -9,15 +9,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'testpost'
+    host: 'aws.connect.psdb.cloud',
+    user: 'fp937ilfocodbfop5fqc',
+    password: 'pscale_pw_GspumUTlPmbatXsf8ES4Gg56VIWzYNNQODZSpobNB3r',
+    database: 'db_project',
+    ssl:{"rejectUnauthorized":true}
+    
 });
 
 app.use(cors())
 
 // api for test
-app.get('/api/attractions', function (req, res, next) {
+app.get('/api/reviews', function (req, res, next) {
     // เอาไว้เลือก page
     const page = parseInt(req.query.page);
     const per_page = parseInt(req.query.per_page);
@@ -30,7 +33,7 @@ app.get('/api/attractions', function (req, res, next) {
     const start_idx = (page - 1) * per_page;
 
     var params = [];
-    var sql = 'SELECT * FROM attractions ';
+    var sql = 'SELECT * FROM reviews ';
     if (search) {
         sql += ' WHERE name LIKE ?'
         params.push('%' + search + '%')
@@ -46,7 +49,7 @@ app.get('/api/attractions', function (req, res, next) {
         function (err, results, fields) {
             // simple query
             connection.query(
-                'SELECT COUNT (id) as total FROM attractions',
+                'SELECT COUNT (id) as total FROM reviews',
                 function (err, counts, fields) {
                     const total = counts[0]['total'];
                     const total_pages = Math.ceil(total/per_page)

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import { Fab } from '@mui/material';
+import { Add } from '@mui/icons-material';
 
 const columns = [
     {
@@ -27,7 +29,7 @@ const columns = [
         name: 'Comment',
         selector: row => row.comment,
         sortable: true,
-        width: '750px'
+        width: '250px'
     },
 
     {
@@ -48,6 +50,11 @@ export default function Reviews() {
     const [sortColumn, setSortColumn] = useState(' ');
     const [sortColumnDir, setSortColumnDir] = useState(' ');
     const [search, setSearch] = useState(' ');
+
+    const [showPopup, setShowPopup] = useState(false);
+    const handleClick = () => {
+        setShowPopup(true);
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -114,6 +121,22 @@ export default function Reviews() {
                 onChangePage={handlePageChange}
                 onSort={handleSort}
             />
+            {/* botton add post */}
+            <div id="fab-container">
+                <Fab color="secondary" aria-label="add" onClick={handleClick}>
+                    <Add onClick={() => setShowPopup(false)} />
+                </Fab>
+            </div>
+
+            {/* popup when u click add post */}
+            <div>
+                {showPopup && (
+                    <div className="popup">
+                        <div>Add some text</div>
+                        <button onClick={() => setShowPopup(false)}>Close Popup</button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
